@@ -1,2 +1,3 @@
 *.cap
 node_modules
+.env

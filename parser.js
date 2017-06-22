@@ -1,116 +1,80 @@
+require('dotenv').config();
 const fs = require('fs');
+const net = require('net');
+const pvoutput = require('./pvoutput.js');
+const omnikDataParser = require('./omnik-data-parser.js');
 
-const Parser = require('binary-parser').Parser;
+const pvoutputclient = new pvoutput({
+    debug: false,
+    apiKey: process.env.PVOUTPUT_APIKEY,
+    systemId: process.env.PVOUTPUT_SYSTEMID
+});    
 
-fs.readFile('test.cap', function(err, data) {
-    console.log(data.length);
-    
-    if (data.length < 143) {
-        // data too short
-        return;
-    }
+const yargs = require('yargs')
+    .command('serve', 'listen for incoming omnik data and submit these to pvoutput', (yargs) => {
+        yargs.option('port', {
+            describe: 'port to bind on',
+            default: 4000
+        })    
+        yargs.option('save', {
+            describe: 'save captures to file',
+            default: false
+        })    
+    }, (argv) => {
+        net.createServer(function (socket) {
+            socket.on('data', function(data) {
+                console.log(data.toString('utf8'));
+                if (argv.save) {
+                    fs.appendFile(new Date().toString() + '.cap', data, function (err) {
+                        if (err) throw err;
+                        console.log('Saved!');
+                    });
+                }
 
-    const omnikSolarByteData = new Parser()
-        .string('header', {
-            encoding: 'hex',
-            length: 4,
-        })
-        .string('unknown', {
-            encoding: 'hex',
-            length: 11,
-        })
-        .string('serialnumber', {
-            length: 16
-        })
-        .string('temperature', {
-            encoding: 'hex',
-            length: 2
-        })
-        .string('vpv1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('vpv2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('vpv3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('ipv1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('ipv2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('ipv3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('iac1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('iac2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('iac3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('vac1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('vac2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('vac3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('fac1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('pac1', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('fac2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('pac2', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('fac3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('pac3', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('etoday', {
-            encoding: 'hex',
-            length: 2 
-        })
-        .string('etotal', {
-            encoding: 'hex',
-            length: 4 
-        })
-        .string('htotal', {
-            encoding: 'hex',
-            length: 4 
-        })
+                // send received data to pvoutput
+                return parseAndSendData(data, new Date());
+            });
+        }).listen(argv.port);
 
-    console.log(omnikSolarByteData.parse(data, 'hex'));
-    
-});
+        console.info('listening for omnik data on port: ' + argv.port)
+    })
+    .command('parse', 'parse a captured omnik tcp message', (yargs) => {
+        yargs.demandOption('file', {
+            describe: 'capture file that needs to be parsed parse',
+        })
+    }, (argv) => {
+        const filename = argv.file;
+
+        fs.readFile(filename, function(err, data) {
+            const timestamp = new Date(filename.split('.')[0])
+            if (!timestamp) {
+                throw new Error('could not parse timestamp in filename');
+            }
+            return parseAndSendData(data, timestamp);
+        });
+    })
+    .option('verbose', {
+        alias: 'v',
+        default: false
+    })
+    .argv
+
+function parseAndSendData(data, timestamp) {
+    const solardata = omnikDataParser(data);
+
+    if (!solardata) return;
+console.log(solardata);
+
+    return pvoutputclient.addStatus({
+        datetime: timestamp,
+        energyGeneration: solardata.etoday * 1000,
+        powerGeneration: solardata.pac1,
+        temperature: solardata.temperature,
+        voltage: solardata.vac1
+
+    }).then(function(result) {
+        console.log(new Date() + 'successfully sent result to pvoutput')
+    }).catch(function(err) {
+        console.log('could not add pvoutput status' + err.message);
+    });
+}
