@@ -69,9 +69,6 @@ function parseAndSendData(data, timestamp) {
         return;
     }
 
-
-    console.log(solardata);
-    return;
     return pvoutputclient.addStatus({
         datetime: timestamp,
         energyGeneration: solardata.etoday * 1000,
