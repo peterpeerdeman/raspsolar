@@ -79,7 +79,7 @@ function parseOmnikData(data) {
         })
         .uint16('pac3')
         .uint16('etoday', {
-            formatter: divideBy10
+            formatter: divideBy100
         })
         .uint32('etotal', {
             formatter: divideBy10
