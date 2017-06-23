@@ -65,7 +65,7 @@ function parseAndSendData(data, timestamp) {
     try {
         const solardata = omnikDataParser(data);
     } catch (err) {
-        console.log(new Date() + 'could not parse omnik data');
+        console.log(new Date() + 'could not parse omnik data: ' + err);
         return;
     }
 
