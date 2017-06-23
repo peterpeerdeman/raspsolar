@@ -53,7 +53,7 @@ function pvoutput(settings) {
         return rp({
             uri: url,
         });
-    }
+    };
 
     /*
      * Get status of PV installation
