@@ -39,9 +39,10 @@ const yargs = require('yargs')
         console.info('listening for omnik data on port: ' + argv.port);
     })
     .command('parse', 'parse a captured omnik tcp message', (yargs) => {
-        yargs.demandOption('file', {
-            describe: 'capture file that needs to be parsed parse',
-        });
+        yargs
+            .demandOption('file')
+            .string('file')
+            .describe('capture file that needs to be parsed parse');
     }, (argv) => {
         const filename = argv.file;
 
