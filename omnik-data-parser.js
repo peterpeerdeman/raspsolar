@@ -84,7 +84,7 @@ function parseOmnikData(data) {
         .uint32('etotal', {
             formatter: divideBy10
         })
-        .uint32('htotal')
+        .uint32('htotal');
 
     return omnikSolarByteData.parse(data, 'hex');
 }

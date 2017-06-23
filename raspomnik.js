@@ -15,11 +15,11 @@ const yargs = require('yargs')
         yargs.option('port', {
             describe: 'port to bind on',
             default: 4000
-        })    
+        });
         yargs.option('save', {
             describe: 'save captures to file',
             default: false
-        })    
+        });
     }, (argv) => {
         net.createServer(function (socket) {
             socket.on('data', function(data) {
@@ -36,28 +36,30 @@ const yargs = require('yargs')
             });
         }).listen(argv.port);
 
-        console.info('listening for omnik data on port: ' + argv.port)
+        console.info('listening for omnik data on port: ' + argv.port);
     })
     .command('parse', 'parse a captured omnik tcp message', (yargs) => {
         yargs.demandOption('file', {
             describe: 'capture file that needs to be parsed parse',
-        })
+        });
     }, (argv) => {
         const filename = argv.file;
 
         fs.readFile(filename, function(err, data) {
-            const timestamp = new Date(filename.split('.')[0])
+            const timestamp = new Date(filename.split('.')[0]);
             if (!timestamp) {
                 throw new Error('could not parse timestamp in filename');
             }
             return parseAndSendData(data, timestamp);
         });
     })
+    .demandCommand(1, 'please use command serve or parse')
     .option('verbose', {
         alias: 'v',
         default: false
     })
-    .argv
+    .help()
+    .argv;
 
 function parseAndSendData(data, timestamp) {
     try {
@@ -67,6 +69,9 @@ function parseAndSendData(data, timestamp) {
         return;
     }
 
+
+    console.log(solardata);
+    return;
     return pvoutputclient.addStatus({
         datetime: timestamp,
         energyGeneration: solardata.etoday * 1000,
@@ -75,7 +80,7 @@ function parseAndSendData(data, timestamp) {
         voltage: solardata.vac1
 
     }).then(function(result) {
-        console.log(new Date() + 'successfully sent result to pvoutput')
+        console.log(new Date() + 'successfully sent result to pvoutput');
     }).catch(function(err) {
         console.log('could not add pvoutput status' + err.message);
     });
