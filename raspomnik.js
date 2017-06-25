@@ -2,13 +2,13 @@ require('dotenv').config();
 const fs = require('fs');
 const net = require('net');
 const pvoutput = require('./pvoutput.js');
-const omnikDataParser = require('./omnik-data-parser.js');
+const omnikDataParser = require('omnik-data-parser');
 
 const pvoutputclient = new pvoutput({
     debug: false,
     apiKey: process.env.PVOUTPUT_APIKEY,
     systemId: process.env.PVOUTPUT_SYSTEMID
-});    
+});
 
 const yargs = require('yargs')
     .command('serve', 'listen for incoming omnik data and submit these to pvoutput', (yargs) => {
