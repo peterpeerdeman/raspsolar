@@ -1,0 +1,19 @@
+const config = {
+    installations: [
+        {
+            label: 'installation1',
+            pvoutput_apikey: 'xxxx',
+            pvoutput_systemid: 'xxxxx',
+            dataparser: 'omnik',
+            port: 4000,
+            save_captures: true
+        },
+        {
+            label: 'installation2',
+            pvoutput_apikey: 'xxxxxxxx',
+            pvoutput_systemid: 'xxxxx',
+            port: 5279,
+            dataparser: 'growatt'
+        }
+    ]
+};

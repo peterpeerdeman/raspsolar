@@ -1,14 +1,14 @@
 {
-  "name": "raspomnik",
+  "name": "raspsolar",
   "version": "1.0.0",
-  "description": "An omnik solar panel data relay that parses data and sends the output to pvoutput.org",
-  "main": "raspomnik.js",
+  "description": "An solar panel data relay that parses data and sends the output to pvoutput.org",
+  "main": "raspsolar.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peterpeerdeman/raspomnik.git"
+    "url": "git+https://github.com/peterpeerdeman/raspsolar.git"
   },
   "keywords": [
     "omnik",
@@ -17,16 +17,14 @@
   "author": "Peter Peerdeman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/peterpeerdeman/raspomnik/issues"
+    "url": "https://github.com/peterpeerdeman/raspsolar/issues"
   },
-  "homepage": "https://github.com/peterpeerdeman/raspomnik#readme",
+  "homepage": "https://github.com/peterpeerdeman/raspsolar#readme",
   "dependencies": {
-    "binary-parser": "^1.1.5",
-    "dotenv": "^4.0.0",
+    "growatt-data-parser": "^1.0.0",
     "moment": "^2.18.1",
     "omnik-data-parser": "^1.0.1",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1",
-    "yargs": "^8.0.2"
+    "request-promise": "^4.2.1"
   }
 }

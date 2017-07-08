@@ -1,32 +1,23 @@
-# Raspomnik
+# Raspsolar
 
-A server that waits for incoming omnik solar panel data, parses it and sends the data to pvoutput.org
+A server that waits for incoming solar panel data, parses it and sends the data to pvoutput.org
 
-Tested with omnik 2000tl2 inverter
+Tested with omnik 2000tl2 inverter and Growatt inverter GT0012F111 with WiFi module
 
 ## usage
 
-Commands:
-  serve  listen for incoming omnik data and submit these to pvoutput
-  parse  parse a captured omnik tcp message
-
-Options:
-  --help         Show help                                             [boolean]
-  --verbose, -v                                                 [default: false]
+`node raspsolar.js`
 
 ## configuration
 
-- `cp .env.dist .env`
-- edit `.env` file and fill in your pvoutput.org APIkey and SystemID values
+- `cp config.js.dist config.js`
+- edit `config.js` file and fill in your pvoutput.org APIkey and SystemID values
 
-## example for server
+## config file values per installation
 
-`node raspomnik serve`
-
-## example for server, capturing received tcp packets
-
-` node raspomnik serve --save`
-
-## example for parsing single capture file
-
-`node raspomnik.js parse --file Fri\ Jun\ 23\ 2017\ 20:18:46\ GMT+0200\ \(CEST\).cap`
+- `label`: used as identifier in console logs and capture files
+- `pvoutput_apikey`: apikey created on pvoutput.org
+- `pvoutput_systemid`: systemid of the installation on pvoutput.org
+- `dataparser`: can be either 'omnik' or 'growatt', depending on different kind of inverter data
+- `port`: port on which to listen for data for this specific installation
+- `save_captures`: whether or not to save the incoming data as raw capture files (either true or false)
