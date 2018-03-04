@@ -23,18 +23,18 @@ config.installations.forEach(function(installation) {
             }
             if (installation.dataparser == 'growatt' && data.length == 18){
                 //this is the client PING, we need to echo the server PING back
-                console.log('sending ping');
+                console.debug('sending ping');
                 socket.write(data);
                 return;
             }
             if (installation.dataparser == 'growatt' && data.length == 241) {
                 //this is the client announcement, we need to reply with ACK 03 packet
-                console.log('sending ack to announcement');
+                console.debug('sending ack to announcement');
                 socket.write(Buffer.from('000100020003010300', 'hex'));
                 return;
             } else {
                 // this is a normal data packet, send ACK 04 packet back
-                console.log('sending ack to data');
+                console.debug('sending ack to data');
                 socket.write(Buffer.from('000100020003010400', 'hex'));
             }
             // send received data to pvoutput
