@@ -21,6 +21,22 @@ config.installations.forEach(function(installation) {
                     if (err) throw err;
                 });
             }
+            if (installation.dataparser == 'growatt' && data.length == 18){
+                //this is the client PING, we need to echo the server PING back
+                console.log('sending ping');
+                socket.write(data);
+                return;
+            }
+            if (installation.dataparser == 'growatt' && data.length == 241) {
+                //this is the client announcement, we need to reply with ACK 03 packet
+                console.log('sending ack to announcement');
+                socket.write(Buffer.from('000100020003010300', 'hex'));
+                return;
+            } else {
+                // this is a normal data packet, send ACK 04 packet back
+                console.log('sending ack to data');
+                socket.write(Buffer.from('000100020003010400', 'hex'));
+            }
             // send received data to pvoutput
             return parseAndSendData(data, new Date(), installation, pvoutputclient);
         });
@@ -38,21 +54,21 @@ function parseAndSendData(data, timestamp, installation, pvoutputclient) {
         } else {
             throw new Error('dataparser was not defined');
         }
+
+        return pvoutputclient.addStatus({
+            datetime: timestamp,
+            energyGeneration: solardata.etoday * 1000,
+            powerGeneration: solardata.pac1,
+            temperature: solardata.temperature,
+            voltage: solardata.vac1
+
+        }).then(function(result) {
+            console.log(installation.label + ' - ' + new Date() + 'successfully sent result to pvoutput');
+        }).catch(function(err) {
+            console.log(installation.label + ' - '+ 'could not add pvoutput status' + err.message);
+        });
     } catch (err) {
-        console.log(installation.label + ' - '+ new Date() + 'could not parse omnik data: ' + err);
+        console.log(installation.label + ' - '+ new Date() + 'could not parse data: ' + err);
         return;
     }
-
-    return pvoutputclient.addStatus({
-        datetime: timestamp,
-        energyGeneration: solardata.etoday * 1000,
-        powerGeneration: solardata.pac1,
-        temperature: solardata.temperature,
-        voltage: solardata.vac1
-
-    }).then(function(result) {
-        console.log(installation.label + ' - ' + new Date() + 'successfully sent result to pvoutput');
-    }).catch(function(err) {
-        console.log(installation.label + ' - '+ 'could not add pvoutput status' + err.message);
-    });
 }

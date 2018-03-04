@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/peterpeerdeman/raspsolar#readme",
   "dependencies": {
-    "growatt-data-parser": "^1.0.0",
+    "growatt-data-parser": "^2.0.0",
     "moment": "^2.18.1",
     "omnik-data-parser": "^1.0.1",
     "request": "^2.81.0",
