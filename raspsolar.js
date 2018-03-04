@@ -20,21 +20,19 @@ config.installations.forEach(function(installation) {
                 fs.appendFile(installation.label + ' - ' + new Date().toString() + '.cap', data, function (err) {
                     if (err) throw err;
                 });
-            }
+            } 
             if (installation.dataparser == 'growatt' && data.length == 18){
                 //this is the client PING, we need to echo the server PING back
-                console.debug('sending ping');
+                console.log('sending ping');
                 socket.write(data);
                 return;
-            }
-            if (installation.dataparser == 'growatt' && data.length == 241) {
-                //this is the client announcement, we need to reply with ACK 03 packet
-                console.debug('sending ack to announcement');
+            } else if (installation.dataparser == 'growatt' && data.length == 223) {
+                //this is the client announcement or valid datapack, we need to reply with ACK 03 packet
+                console.log('sending ack to announcement');
                 socket.write(Buffer.from('000100020003010300', 'hex'));
-                return;
-            } else {
+            } else if (installation.dataparser == 'growatt') {
                 // this is a normal data packet, send ACK 04 packet back
-                console.debug('sending ack to data');
+                console.log('sending ack to data');
                 socket.write(Buffer.from('000100020003010400', 'hex'));
             }
             // send received data to pvoutput
