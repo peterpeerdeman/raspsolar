@@ -14,6 +14,7 @@ config.installations.forEach(function(installation) {
     });
 
     net.createServer(function (socket) {
+        let lastDataSent = 0;
         socket.on('data', function(data) {
             console.log('incoming data for installation: ' + installation.label);
             if (installation.save_captures) {
@@ -35,8 +36,15 @@ config.installations.forEach(function(installation) {
                 console.log('sending ack to data');
                 socket.write(Buffer.from('000100020003010400', 'hex'));
             }
-            // send received data to pvoutput
-            return parseAndSendData(data, new Date(), installation, pvoutputclient);
+
+            // send received data to pvoutput, but skip if it was less than 5 min ago
+            const timestampNow = new Date()
+            if (timestampNow - lastDataSent < (5 * 60000)) {
+                console.log('skipping ' + installation.label + ' data sent to pvoutput (less than 5 minutes ago)');
+            } else {
+                lastDataSent = new Date();
+                return parseAndSendData(data, new Date(), installation, pvoutputclient);
+            }
         });
     }).listen(installation.port);
     console.info(installation.label + ': listening for solar data on port: ' + installation.port);
