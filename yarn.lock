@@ -41,6 +41,10 @@ binary-parser@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/binary-parser/-/binary-parser-1.1.5.tgz#7224d61a4e2fa7b5aede69fe4f0ea6a0902b79e8"
 
+binary-parser@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/binary-parser/-/binary-parser-1.5.0.tgz#3e50de3a5076badbacd760e833e7d94892b9e9fa"
+
 bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
@@ -228,11 +232,11 @@ oauth-sign@~0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
-omnik-data-parser@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/omnik-data-parser/-/omnik-data-parser-1.0.1.tgz#e43edc5f42dbfb0a29c58e9ccab8b28c47aa12b2"
+omnik-data-parser@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/omnik-data-parser/-/omnik-data-parser-1.0.2.tgz#9068bb54128edc64a75203df94d47f523a102ddf"
   dependencies:
-    binary-parser "^1.1.5"
+    binary-parser "^1.5.0"
 
 performance-now@^2.1.0:
   version "2.1.0"
@@ -317,8 +321,8 @@ stealthy-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
 stringstream@~0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/stringstream/-/stringstream-0.0.5.tgz#4e484cd4de5a0bbbee18e46307710a8a81621878"
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/stringstream/-/stringstream-0.0.6.tgz#7880225b0d4ad10e30927d167a1d6f2fd3b33a72"
 
 tough-cookie@>=2.3.0:
   version "2.3.2"
