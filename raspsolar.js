@@ -1,6 +1,6 @@
 const fs = require('fs');
 const net = require('net');
-const pvoutput = require('./pvoutput.js');
+const pvoutput = require('pvoutput');
 const omnikDataParser = require('omnik-data-parser');
 const growattDataParser = require('growatt-data-parser');
 

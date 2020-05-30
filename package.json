@@ -24,6 +24,7 @@
     "growatt-data-parser": "^2.1.0",
     "moment": "^2.18.1",
     "omnik-data-parser": "^1.0.2",
+    "pvoutput": "git+https://github.com/peterpeerdeman/pvoutput.git",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   }
