@@ -1,6 +1,16 @@
 const config = {
     installations: [
         {
+            label: 'installation0',
+            type: 'logger',
+            pvoutput_apikey: 'xxxx',
+            pvoutput_systemid: 'xxxx',
+            dataparser: 'solaredge',
+            frequency: '*/5 * * * *',
+            solaredge_apikey: 'xxxx',
+            solaredge_installationid: xxxx
+        },{
+        {
             label: 'installation1',
             pvoutput_apikey: 'xxxx',
             pvoutput_systemid: 'xxxxx',

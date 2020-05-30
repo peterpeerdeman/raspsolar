@@ -3,6 +3,8 @@ const net = require('net');
 const pvoutput = require('pvoutput');
 const omnikDataParser = require('omnik-data-parser');
 const growattDataParser = require('growatt-data-parser');
+const CronJob = require('cron').CronJob;
+const axios = require('axios').default;
 
 const config = require('./config');
 
@@ -13,6 +15,14 @@ config.installations.forEach(function(installation) {
         systemId: installation.pvoutput_systemid
     });
 
+    if(installation.type == 'server') {
+        createServer(installation, pvoutputclient);
+    } else if (installation.type == 'logger') {
+        createLogger(installation, pvoutputclient);
+    }
+});
+
+function createServer(installation, pvoutputclient) {
     net.createServer(function (socket) {
         let lastDataSent = 0;
         socket.on('data', function(data) {
@@ -38,7 +48,7 @@ config.installations.forEach(function(installation) {
             }
 
             // send received data to pvoutput, but skip if it was less than 5 min ago
-            const timestampNow = new Date()
+            const timestampNow = new Date();
             if (timestampNow - lastDataSent < (5 * 60000)) {
                 console.log('skipping ' + installation.label + ' data sent to pvoutput (less than 5 minutes ago)');
             } else {
@@ -48,7 +58,49 @@ config.installations.forEach(function(installation) {
         });
     }).listen(installation.port);
     console.info(installation.label + ': listening for solar data on port: ' + installation.port);
-});
+}
+
+function getSiteOverviewData(installation) {
+    return axios.get(`https://monitoringapi.solaredge.com/site/${installation.solaredge_installationid}/overview?api_key=${installation.solaredge_apikey}`)
+    .then(function (response) {
+        // handle success
+        return response.data.overview;
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    });
+}
+
+function createLogger(installation, pvoutputclient) {
+    const cronJob = new CronJob({
+        cronTime: installation.frequency,
+        onTick: function() {
+            getSiteOverviewData(installation)
+            .then(function (data) {
+                // handle success
+                parseAndSendData(data, new Date(), installation, pvoutputclient);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+        },
+        start: true,
+        timeZone: 'Europe/Amsterdam'
+    });
+    cronJob.start();
+    console.info(installation.label + ': logging solar data from: ' + installation.dataparser);
+}
+
+function solarEdgeParser(data) {
+    return {
+        etoday: data.lastDayData.energy/1000,
+        pac1: data.currentPower.power,
+        temperature: undefined,
+        vac1: undefined
+    };
+}
 
 function parseAndSendData(data, timestamp, installation, pvoutputclient) {
     try {
@@ -57,6 +109,8 @@ function parseAndSendData(data, timestamp, installation, pvoutputclient) {
             solardata = omnikDataParser(data);
         } else if (installation.dataparser == 'growatt'){
             solardata = growattDataParser(data);
+        } else if (installation.dataparser == 'solaredge') {
+            solardata = solarEdgeParser(data);
         } else {
             throw new Error('dataparser was not defined');
         }
