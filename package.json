@@ -21,12 +21,12 @@
   },
   "homepage": "https://github.com/peterpeerdeman/raspsolar#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cron": "^1.8.2",
     "growatt-data-parser": "^2.1.0",
     "moment": "^2.18.1",
     "omnik-data-parser": "^1.0.2",
-    "pvoutput": "git+https://github.com/peterpeerdeman/pvoutput.git",
+    "pvoutput": "^1.0.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   }
