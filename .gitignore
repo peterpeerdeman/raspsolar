@@ -1,3 +1,3 @@
 *.cap
 node_modules
-config.js
+.env

@@ -6,8 +6,8 @@ Tested with omnik 2000tl2 inverter and Growatt inverter GT0012F111 with WiFi mod
 
 ## setup / configuration
 
-- First copy the config example file: `cp config.js.dist config.js`
-- edit `config.js` file and fill in your pvoutput.org APIkey and SystemID values, along with your solar panel configuration (growatt, solaredge or omnik)
+- First copy the config example file: `cp .env.dist .env`
+- edit `.env` file and fill in your pvoutput.org APIkey and SystemID values, along with your solar panel configuration (growatt, solaredge or omnik)
 
 ## usage
 
@@ -25,16 +25,16 @@ docker run -it --rm -v "$PWD":/usr/src/app -w /usr/src/app -p 5279:5279 node:13-
 
 ## config file values per installation
 
-- `label`: used as identifier in console logs and capture files
-- `pvoutput_apikey`: apikey created on pvoutput.org
-- `pvoutput_systemid`: systemid of the installation on pvoutput.org
-- `dataparser`: can be either 'omnik' or 'growatt', depending on different kind of inverter data
-- `port`: port on which to listen for data for this specific installation
-- `save_captures`: whether or not to save the incoming data as raw capture files (either true or false)
+- `INSTALLATION_LABEL`: used as identifier in console logs and capture files
+- `INSTALLATION_TYPE`: server or logger
+- `PVOUTPUT_APIKEY`: apikey created on pvoutput.org
+- `PVOUTPUT_SYSTEMID`: systemid of the installation on pvoutput.org
+- `DATAPARSER`: can be either 'omnik' or 'growatt', depending on different kind of inverter data
+- `PORT`: port on which to listen for data for this specific installation
 
 ## specific config file values for solaredge
 
-- `dataparser: 'solaredge'`
-- `frequency: '*/5 * * * *'`: cron style frequency of how frequent to poll the api
-- `solaredge_apikey: 'xxxx'`
-- `solaredge_installationid: 'xxxx'`
+- `DATAPARSER: 'solaredge'`
+- `FREQUENCY: '*/5 * * * *'`: cron style frequency of how frequent to poll the api
+- `SOLAREDGE_APIKEY: 'xxxx'`
+- `SOLAREDGE_INSTALLATIONID: 'xxxx'`
