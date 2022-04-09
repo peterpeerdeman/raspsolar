@@ -25,7 +25,7 @@
     "cron": "^1.8.2",
     "dotenv": "^16.0.0",
     "growatt-data-parser": "^2.1.0",
-    "moment": "^2.18.1",
+    "moment": "^2.29.2",
     "omnik-data-parser": "^1.0.2",
     "pvoutput": "^1.0.0",
     "request": "^2.81.0",
