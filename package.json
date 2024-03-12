@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peterpeerdeman/raspsolar.git"
+    "url": "https://github.com/peterpeerdeman/raspsolar.git"
   },
   "keywords": [
     "omnik",
@@ -21,14 +21,12 @@
   },
   "homepage": "https://github.com/peterpeerdeman/raspsolar#readme",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.7",
     "cron": "^1.8.2",
     "dotenv": "^16.0.0",
     "growatt-data-parser": "^2.1.0",
-    "moment": "^2.18.1",
+    "moment": "^2.30.1",
     "omnik-data-parser": "^1.0.2",
-    "pvoutput": "^1.0.0",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "pvoutput": "^1.0.3"
   }
 }
