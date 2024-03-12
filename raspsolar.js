@@ -21,6 +21,7 @@ if (process.env.INSTALLATION_TYPE == "server") {
 function createServer(pvoutputclient) {
   net
     .createServer(function (socket) {
+      socket.on("error", (err) => console.log(err));
       let lastDataSent = 0;
       socket.on("data", function (data) {
         console.log(
