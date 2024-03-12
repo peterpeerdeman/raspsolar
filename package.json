@@ -1,6 +1,6 @@
 {
   "name": "raspsolar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An solar panel data relay that parses data and sends the output to pvoutput.org",
   "main": "raspsolar.js",
   "scripts": {
