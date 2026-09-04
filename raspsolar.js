@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const net = require("net");
 const pvoutput = require("pvoutput");
@@ -76,7 +76,7 @@ function getSiteOverviewData() {
 }
 
 function createLogger(pvoutputclient) {
-  const cronJob = new CronJob({
+  const cronJob = CronJob.from({
     cronTime: process.env.FREQUENCY,
     onTick: function () {
       getSiteOverviewData()
